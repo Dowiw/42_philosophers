@@ -1,6 +1,8 @@
-# User files
+# User files & Directories
+/test
 test.c
 
 # Binaries & Compiles
 a.out
+philo/philo
 *.o

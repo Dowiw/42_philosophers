@@ -27,6 +27,7 @@
 		"*.rexx": "rexx",
 		".env*": "dotenv",
 		"stdlib.h": "c",
-		"unistd.h": "c"
+		"unistd.h": "c",
+		"time.h": "c"
 	}
 }

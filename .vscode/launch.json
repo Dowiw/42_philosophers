@@ -8,7 +8,7 @@
 		"name": "Debug philo",
 		"type": "cppdbg",
 		"request": "launch",
-		"program": "${workspaceFolder}/a.out",
+		"program": "${workspaceFolder}/philo/philo",
 		"cwd": ".",
 		"args": ["10", "10", "10", "10"],
 		"stopAtConnect": false,
