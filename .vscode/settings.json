@@ -28,6 +28,11 @@
 		".env*": "dotenv",
 		"stdlib.h": "c",
 		"unistd.h": "c",
-		"time.h": "c"
+		"time.h": "c",
+		"philosophers.h": "c",
+		"philo.h": "c",
+		"array": "c",
+		"string": "c",
+		"string_view": "c"
 	}
 }

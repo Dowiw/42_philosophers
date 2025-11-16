@@ -10,7 +10,7 @@
 		"request": "launch",
 		"program": "${workspaceFolder}/philo/philo",
 		"cwd": ".",
-		"args": ["10", "10", "10", "10"],
+		"args": ["10", "10", "10", "10"], // 
 		"stopAtConnect": false,
 		"externalConsole": false,
 		"MIMode": "gdb",
