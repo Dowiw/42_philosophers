@@ -7,42 +7,42 @@
 #include <sys/time.h>
 #include <pthread.h>
 #include <stdbool.h>
-#include <limits.h>
 
-struct s_philo_data;
-typedef struct s_philo_data t_philo_data;
-
-typedef struct	s_fork
-{
-	bool			fork;
-	pthread_mutex_t	mutex;
-}			t_fork;
+#  define UINT_MAX 4294967295
 
 /**
  * @brief Data for a philosopher
  *
+ * @param dead_bool boolean for all threads
  * @param id philosopher id
- * @param is_alive boolean of the philosopher being alive (default: true)
- * @param fork_count current fork on hand (default: 0)
- * @param left_fork pointer to shared left fork
- * @param right_fork pointer to shared right fork
- * @param data pointer to general data
+ * @param meals_to_finish meals to finish if set
+ * @param meals_eaten meals completed
+ * @param print_mutex mutex to print
+ * @param eat_mutex mutex to eat
+ * @param dead_mutex mutex to die
+ * @param right_fork the right fork
+ * @param left_fork the left fork
  */
 typedef struct	s_philosophers
 {
+	int				*dead_bool;
 	unsigned int	id;
-	bool			is_alive;
-	bool			has_eaten;
-	short			fork_count;
-	pthread_mutex_t	philo_mutex; // test
-	t_fork			*left_fork;
-	t_fork			*right_fork;
-	t_philo_data	*data;
+	unsigned int	meals_to_finish;
+	unsigned int	meals_eaten;
+	__useconds_t	die_ms;
+	__useconds_t	eat_ms;
+	__useconds_t	sleep_ms;
+	pthread_mutex_t	*print_mutex;
+	pthread_mutex_t	*eat_mutex;
+	pthread_mutex_t	*dead_mutex;
+	pthread_mutex_t	*right_fork;
+	pthread_mutex_t	*left_fork;
 }					t_philosophers;
 
 /**
  * @brief Data for the philosopher project
  *
+ * @param dead_bool bool if anyone diea
  * @param die_ms miliseconds to die if hungry (microseconds)
  * @param eat_ms miliseconds it takes to eat in microseconds
  * @param sleep_ms miliseconds it takes to sleep in microseconds
@@ -52,20 +52,30 @@ typedef struct	s_philosophers
  */
 typedef struct s_philo_data
 {
+	int				dead_bool;
+	//
+	unsigned int	philo_count;
+	unsigned int	eat_count;
 	__useconds_t	die_ms;
 	__useconds_t	eat_ms;
 	__useconds_t	sleep_ms;
-	unsigned int	eat_count;
-	unsigned int	philo_count;
-	struct timeval	start_timeval;
-	long			start_time;
+	//
 	pthread_mutex_t	print_mutex;
+	pthread_mutex_t	eat_mutex;
+	pthread_mutex_t	dead_mutex;
 	pthread_t		*philo_threads;
 	t_philosophers	*philosophers;
 }					t_philo_data;
 
-void	*init_philosopher(void *arg);
+// initializers.c
+int	init_data(t_philo_data *data);
 
-long	get_ms(struct timeval time);
+// parsing.c
+
+void	parse_args(char **av, t_philo_data *data);
+
+// utils.c
+
+void	delete_data(t_philo_data *data);
 
 #endif
