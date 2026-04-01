@@ -30,7 +30,6 @@ int	main(int ac, char **av)
 		return (1);
 	if (init_data(&data) != 0)
 		return (1);
-	printf("Starting simulation\n");
 	start_simulation(&data);
 	delete_data(&data);
 	return (0);
