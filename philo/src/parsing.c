@@ -31,7 +31,7 @@ static long	ft_atol(char *str)
 	num = 0;
 	while (*str != '\0' && (*str >= '0' && *str <= '9'))
 	{
-		num *= (num * 10) + (*str - '0');
+		num = (num * 10) + (*str - '0');
 		str++;
 	}
 	return (num);
