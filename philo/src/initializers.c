@@ -1,105 +1,82 @@
 #include "philosophers.h"
 
 /**
- *
+ * @brief Sets each philosopher and assigns forks.
  */
-static int assign_forks(t_philo_data *data)
+static int	init_philosophers(t_philo_data *data)
 {
-	unsigned int	i;
-	pthread_mutex_t	*forks;
+	int	i;
 
-	forks = malloc(sizeof(pthread_mutex_t) * data->philo_count);
-	if (!forks)
-	{
-		delete_data(data);
-		write(2, "Error: forks malloc\n", 21);
-		return (1);
-	}
 	i = 0;
-	if (data->philo_count == 1)
-	{
-		data->philosophers[i].left_fork = &forks[i];
-		data->philosophers[i].right_fork = NULL;
-		return (0);
-	}
 	while (i < data->philo_count)
 	{
-		data->philosophers[i].left_fork = &forks[i];
-		data->philosophers[i].right_fork = &forks[(i + 1) % data->philo_count];
+		data->philos[i].id = i + 1;
+		data->philos[i].meals_eaten = 0;
+		data->philos[i].last_meal = 0;
+		data->philos[i].data = data;
+		if (pthread_mutex_init(&data->philos[i].meal_mutex, NULL) != 0)
+		{
+			while (--i >= 0)
+				pthread_mutex_destroy(&data->philos[i].meal_mutex);
+			write(STDERR_FILENO, "Error: meal_mutex init failed\n", 30);
+			free(data->philos);
+			data->philos = NULL;
+			return (1);
+		}
+		data->philos[i].left_fork = &data->forks[i];
+		data->philos[i].right_fork = &data->forks[(i + 1) % data->philo_count];
 		i++;
 	}
 	return (0);
 }
 
 /**
- *
+ * @brief Initialize all forks, destroy previous if failed
  */
-static int	init_philo(t_philo_data *data)
+static int	init_forks(t_philo_data *data)
 {
-	unsigned int	i;
+	int	i;
 
 	i = 0;
 	while (i < data->philo_count)
 	{
-		data->philosophers[i].dead_bool = &data->dead_bool;
-		data->philosophers[i].id = i;
-		data->philosophers[i].meals_eaten = 0;
-		data->philosophers[i].meals_to_finish = data->eat_count;
-		data->philosophers[i].die_ms = data->die_ms;
-		data->philosophers[i].eat_ms = data->eat_ms;
-		data->philosophers[i].sleep_ms = data->sleep_ms;
-		data->philosophers[i].print_mutex = &data->print_mutex;
-		data->philosophers[i].eat_mutex = &data->eat_mutex;
-		data->philosophers[i].dead_mutex = &data->dead_mutex;
+		if (pthread_mutex_init(&data->forks[i], NULL) != 0)
+		{
+			while (--i >= 0)
+				pthread_mutex_destroy(&data->forks[i]);
+			write(STDERR_FILENO, "Error: mutex init\n", 24);
+			free(data->forks);
+			data->forks = NULL;
+			return (1);
+		}
 		i++;
 	}
-	return (assign_forks(data));
+	return (0);
 }
 
 /**
- *
- */
-static int	malloc_philo(t_philo_data *data)
-{
-	data->philo_threads = malloc(sizeof(pthread_t) * data->philo_count);
-	if (!data->philo_threads)
-	{
-		delete_data(data);
-		write(STDERR_FILENO, "Error: philo_threads malloc\n", 29);
-		return (1);
-	}
-	data->philosophers = malloc(sizeof(t_philosopher) * data->philo_count);
-	if (!data->philo_count)
-	{
-		delete_data(data);
-		write(STDERR_FILENO, "Error: philosophers malloc\n", 28);
-		return (1);
-	}
-	return (init_philo(data));
-}
-
-/**
- * 
+ * @brief Allocates memory and initializes all mutexes.
  */
 int	init_data(t_philo_data *data)
 {
-	data->dead_bool = 0;
+	data->dead_flag = 0;
+	if (pthread_mutex_init(&data->print_mutex, NULL) != 0)
+		return (write(STDERR_FILENO, "Error: print_mutex init fail\n", 30), 1);
 	if (pthread_mutex_init(&data->dead_mutex, NULL) != 0)
 	{
-		write(STDERR_FILENO, "Error: dead_mutex init\n", 24);
-		return (1);
+		pthread_mutex_destroy(&data->print_mutex);
+		return (write(STDERR_FILENO, "Error: dead_mutex init fail\n", 29), 1);
 	}
-	if (pthread_mutex_init(&data->eat_mutex, NULL) != 0)
-	{
-		pthread_mutex_destroy(&data->dead_mutex);
-		write(STDERR_FILENO, "Error: eat_mutex init\n", 23);
-		return (1);
-	}
-	if (pthread_mutex_init(&data->print_mutex, NULL) != 0)
+	data->forks = malloc(sizeof(pthread_mutex_t) * data->philo_count);
+	data->philos = malloc(sizeof(t_philosopher) * data->philo_count);
+	if (!data->forks || !data->philos)
 	{
 		delete_data(data);
-		write(STDERR_FILENO, "Error: print_mutex init\n", 25);
-		return (1);
+		return (write(STDERR_FILENO, "Error: malloc failed\n", 22), 1);
 	}
-	return (malloc_philo(data));
+	if (init_forks(data) != 0)
+		return (delete_data(data), 1);
+	if (init_philosophers(data) != 0)
+		return (delete_data(data), 1);
+	return (0);
 }
