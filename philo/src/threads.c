@@ -1,32 +1,57 @@
 #include "philosophers.h"
 
 /**
+ * @brief Extension of monitor_simulation.
+ * Main logic for locking mutexes and checking dead_flag.
+ * Modifies full_philos if current one is full.
+ */
+static int	monitor_each(t_philo_data *data, int *full_philos, int i)
+{
+	pthread_mutex_lock(&data->philos[i].meal_mutex);
+	if (get_time_in_ms() - data->philos[i].last_meal >= data->die_time)
+	{
+		pthread_mutex_lock(&data->dead_mutex);
+		data->dead_flag = 1;
+		pthread_mutex_unlock(&data->dead_mutex);
+		pthread_mutex_lock(&data->print_mutex);
+		printf("%ld %d died\n", get_time_in_ms() - data->start_time,
+			data->philos[i].id);
+		pthread_mutex_unlock(&data->print_mutex);
+		pthread_mutex_unlock(&data->philos[i].meal_mutex);
+		return (1);
+	}
+	if (data->must_eat_count != -1 &&
+		data->philos[i].meals_eaten >= data->must_eat_count)
+		(*full_philos)++;
+	pthread_mutex_unlock(&data->philos[i].meal_mutex);
+	return (0);
+}
+
+/**
  * @brief Monitoring loop that checks for deaths or full bellies.
  * Runs main thread while philosophers eat/sleep/think.
  */
 static void	monitor_simulation(t_philo_data *data)
 {
 	int	i;
+	int	full_philos;
 
 	while (1)
 	{
 		i = 0;
+		full_philos = 0;
 		while (i < data->philo_count)
 		{
-			pthread_mutex_lock(&data->philos[i].meal_mutex);
-			if (get_time_in_ms() - data->philos[i].last_meal >= data->die_time)
-			{
-				pthread_mutex_lock(&data->dead_mutex);
-				data->dead_flag = 1;
-				pthread_mutex_unlock(&data->dead_mutex);
-				pthread_mutex_lock(&data->print_mutex);
-				printf("%ld %d died\n", get_time_in_ms() - data->start_time, data->philos[i].id);
-				pthread_mutex_unlock(&data->print_mutex);
-				pthread_mutex_unlock(&data->philos[i].meal_mutex);
+			if (monitor_each(data, &full_philos, i) != 0)
 				return ;
-			}
-			pthread_mutex_unlock(&data->philos[i].meal_mutex);
 			i++;
+		}
+		if (data->must_eat_count != -1 && full_philos == data->philo_count)
+		{
+			pthread_mutex_lock(&data->dead_mutex);
+			data->dead_flag = 1;
+			pthread_mutex_unlock(&data->dead_mutex);
+			return ;
 		}
 		usleep(1000);
 	}
