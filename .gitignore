@@ -1,6 +1,7 @@
 # User files & Directories
 /test
 test.c
+test.py
 
 # Binaries & Compiles
 a.out
