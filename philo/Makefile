@@ -17,7 +17,7 @@ CC = gcc
 
 SRC_DIR = ./src/
 
-C_FILES = main.c utils.c philosopher.c
+C_FILES = main.c utils.c initializers.c parsing.c threads.c philosopher.c
 C_SRC = $(addprefix $(SRC_DIR), $(C_FILES))
 
 O_FILES = $(C_SRC:.c=.o)

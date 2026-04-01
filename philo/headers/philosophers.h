@@ -8,9 +8,7 @@
 # include <pthread.h>
 # include <stdbool.h>
 
-# define UINT_MAX 4294967295
-
-struct s_philo_data;
+struct	s_philo_data;
 
 /**
  * @brief Individual Philosopher Data
@@ -24,7 +22,7 @@ typedef struct s_philosopher
 	pthread_mutex_t		*left_fork;
 	pthread_mutex_t		*right_fork;
 	pthread_mutex_t		meal_mutex;
-	struct s_data		*data;
+	struct s_philo_data	*data;
 }	t_philosopher;
 
 /**
@@ -49,10 +47,10 @@ typedef struct s_philo_data
 
 // main.c / parsing.c
 unsigned int	ft_atoi_u(char *str);
-int				parse_args(char **av, t_philo_data *data);
+int				parse_args(int ac, char **av, t_philo_data *data);
 
 // initializers.c
-int				init_philo_data(t_philo_data *data);
+int				init_data(t_philo_data *data);
 
 // philosopher.c / simulation
 void			*philosopher_routine(void *arg);
@@ -60,7 +58,8 @@ void			start_simulation(t_philo_data *data);
 
 // utils.c
 long			get_time_in_ms(void);
-void			ft_usleep(long milliseconds);
+void			ft_usleep(long milliseconds, t_philo_data *data);
+void			print_status(t_philosopher *philo, char *status);
 void			delete_data(t_philo_data *data);
 
 #endif

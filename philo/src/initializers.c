@@ -44,7 +44,7 @@ static int	init_forks(t_philo_data *data)
 		{
 			while (--i >= 0)
 				pthread_mutex_destroy(&data->forks[i]);
-			write(STDERR_FILENO, "Error: mutex init\n", 24);
+			write(STDERR_FILENO, "Error: mutex init\n", 19);
 			free(data->forks);
 			data->forks = NULL;
 			return (1);
