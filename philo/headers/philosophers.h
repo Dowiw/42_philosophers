@@ -1,81 +1,66 @@
 #ifndef PHILOSOPHERS_H
 # define PHILOSOPHERS_H
 
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <sys/time.h>
-#include <pthread.h>
-#include <stdbool.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <stdio.h>
+# include <sys/time.h>
+# include <pthread.h>
+# include <stdbool.h>
 
-#  define UINT_MAX 4294967295
+# define UINT_MAX 4294967295
+
+struct s_philo_data;
 
 /**
- * @brief Data for a philosopher
- *
- * @param dead_bool boolean for all threads
- * @param id philosopher id
- * @param meals_to_finish meals to finish if set
- * @param meals_eaten meals completed
- * @param print_mutex mutex to print
- * @param eat_mutex mutex to eat
- * @param dead_mutex mutex to die
- * @param right_fork the right fork
- * @param left_fork the left fork
+ * @brief Individual Philosopher Data
  */
-typedef struct	s_philosophers
+typedef struct s_philosopher
 {
-	int				*dead_bool;
-	unsigned int	id;
-	unsigned int	meals_to_finish;
-	unsigned int	meals_eaten;
-	__useconds_t	die_ms;
-	__useconds_t	eat_ms;
-	__useconds_t	sleep_ms;
-	pthread_mutex_t	*print_mutex;
-	pthread_mutex_t	*eat_mutex;
-	pthread_mutex_t	*dead_mutex;
-	pthread_mutex_t	*right_fork;
-	pthread_mutex_t	*left_fork;
-}					t_philosophers;
+	pthread_t			thread;
+	int					id;
+	int					meals_eaten;
+	long				last_meal;
+	pthread_mutex_t		*left_fork;
+	pthread_mutex_t		*right_fork;
+	pthread_mutex_t		meal_mutex;
+	struct s_data		*data;
+}	t_philosopher;
 
 /**
- * @brief Data for the philosopher project
- *
- * @param dead_bool bool if anyone diea
- * @param die_ms miliseconds to die if hungry (microseconds)
- * @param eat_ms miliseconds it takes to eat in microseconds
- * @param sleep_ms miliseconds it takes to sleep in microseconds
- * @param eat_count number of times a philosopher eats
- * @param philo_count number of philosophers
- * @param philo_threads allocated philosopher thread array
+ * @brief Global Program Data
  */
 typedef struct s_philo_data
 {
-	int				dead_bool;
-	//
-	unsigned int	philo_count;
-	unsigned int	eat_count;
-	__useconds_t	die_ms;
-	__useconds_t	eat_ms;
-	__useconds_t	sleep_ms;
-	//
-	pthread_mutex_t	print_mutex;
-	pthread_mutex_t	eat_mutex;
+	int				philo_count;
+	long			die_time;
+	long			eat_time;
+	long			sleep_time;
+	int				must_eat_count;
+	int				dead_flag;
+	long			start_time;
 	pthread_mutex_t	dead_mutex;
-	pthread_t		*philo_threads;
-	t_philosophers	*philosophers;
-}					t_philo_data;
+	pthread_mutex_t	print_mutex;
+	pthread_mutex_t	*forks;
+	t_philosopher	*philos;
+}	t_philo_data;
+
+// --- Function Prototypes ---
+
+// main.c / parsing.c
+unsigned int	ft_atoi_u(char *str);
+int				parse_args(char **av, t_philo_data *data);
 
 // initializers.c
-int	init_data(t_philo_data *data);
+int				init_philo_data(t_philo_data *data);
 
-// parsing.c
-
-void	parse_args(char **av, t_philo_data *data);
+// philosopher.c / simulation
+void			*philosopher_routine(void *arg);
+void			start_simulation(t_philo_data *data);
 
 // utils.c
-
-void	delete_data(t_philo_data *data);
+long			get_time_in_ms(void);
+void			ft_usleep(long milliseconds);
+void			delete_data(t_philo_data *data);
 
 #endif
