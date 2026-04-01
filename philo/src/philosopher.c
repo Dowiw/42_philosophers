@@ -25,6 +25,10 @@ int	check_dead(t_philo_data *data)
 	return (stop);
 }
 
+/**
+ * @brief Function for philosopher eating.
+ * Involves check for philo_count == 1.
+ */
 static int	philo_eat(t_philosopher *philo)
 {
 	pthread_mutex_lock(philo->left_fork);
@@ -48,6 +52,9 @@ static int	philo_eat(t_philosopher *philo)
 	return (0);
 }
 
+/**
+ * @brief Philosopher routine
+ */
 void	*philosopher_routine(void *arg)
 {
 	t_philosopher	*philo;

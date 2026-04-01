@@ -2,8 +2,8 @@
 #include <sys/time.h>
 
 /**
- * @brief Prints the status of a philosopher in a thread-safe way.
- * It also prevents printing any further messages once someone has died.
+ * @brief Prints the status in a thread-safe way.
+ * Prevents further messages if one is dead.
  */
 void	print_status(t_philosopher *philo, char *status)
 {
@@ -26,9 +26,9 @@ void	print_status(t_philosopher *philo, char *status)
 }
 
 /**
- * @brief High-precision sleep function.
- * Sleeps in small increments while checking the current time to ensure
- * we don't oversleep due to OS scheduling.
+ * @brief Precise sleep function.
+ * Sleeps in small increments while checking current time.
+ * Fixes oversleep due to OS scheduling.
  */
 void	ft_usleep(long milliseconds, t_philo_data *data)
 {

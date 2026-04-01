@@ -39,7 +39,7 @@ static long	ft_atol(char *str)
 
 
 /**
- * @brief Parse the given arguments into data inside the struct
+ * @brief Parse the given arguments into data inside the struct.
  */
 int	parse_args(int ac, char **av, t_philo_data *data)
 {
