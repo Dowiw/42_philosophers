@@ -1,5 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kmonjard <kmonjard@student.42berlin.d      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/09 18:13:28 by kmonjard          #+#    #+#             */
+/*   Updated: 2026/04/09 18:13:29 by kmonjard         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philosophers.h"
 #include <sys/time.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 /**
  * @brief Prints the status in a thread-safe way.
@@ -57,7 +72,7 @@ long	get_time_in_ms(void)
 	struct timeval	time;
 
 	if (gettimeofday(&time, NULL) == -1)
-		return (write(2, "Error: gettimeofday()\n", 23), -1);
+		return (write(STDERR_FILENO, "Error: gettimeofday()\n", 23), -1);
 	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
 
