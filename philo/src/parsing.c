@@ -1,4 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kmonjard <kmonjard@student.42berlin.d      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/09 18:13:51 by kmonjard          #+#    #+#             */
+/*   Updated: 2026/04/09 18:13:52 by kmonjard         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philosophers.h"
+#include <unistd.h>
 
 /**
  * @brief Checks if a string contains digits.
@@ -37,7 +50,6 @@ static long	ft_atol(char *str)
 	return (num);
 }
 
-
 /**
  * @brief Parse the given arguments into data inside the struct.
  */
@@ -51,7 +63,7 @@ int	parse_args(int ac, char **av, t_philo_data *data)
 		if (!is_numeric(av[i]))
 		{
 			return (write(STDERR_FILENO, "Error: Argument is not"
-			"a valid positive integer.\n", 49), 1);
+					"a valid positive integer.\n", 49), 1);
 		}
 		i++;
 	}
