@@ -1,4 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   initializers.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kmonjard <kmonjard@student.42berlin.d      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/09 18:07:46 by kmonjard          #+#    #+#             */
+/*   Updated: 2026/04/09 18:07:49 by kmonjard         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philosophers.h"
+#include <unistd.h>
+#include <stdlib.h>
 
 /**
  * @brief Sets each philosopher and assigns forks.
