@@ -1,12 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philosophers.h                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kmonjard <kmonjard@student.42berlin.d      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/09 18:07:27 by kmonjard          #+#    #+#             */
+/*   Updated: 2026/04/09 18:07:29 by kmonjard         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PHILOSOPHERS_H
 # define PHILOSOPHERS_H
 
-# include <stdlib.h>
-# include <unistd.h>
-# include <stdio.h>
-# include <sys/time.h>
 # include <pthread.h>
-# include <stdbool.h>
 
 struct	s_philo_data;
 
@@ -46,17 +53,21 @@ typedef struct s_philo_data
 // --- Function Prototypes ---
 
 // main.c / parsing.c
+
 unsigned int	ft_atoi_u(char *str);
 int				parse_args(int ac, char **av, t_philo_data *data);
 
 // initializers.c
+
 int				init_data(t_philo_data *data);
 
 // philosopher.c / simulation
+
 void			*philosopher_routine(void *arg);
 void			start_simulation(t_philo_data *data);
 
 // utils.c
+
 long			get_time_in_ms(void);
 void			ft_usleep(long milliseconds, t_philo_data *data);
 void			print_status(t_philosopher *philo, char *status);
