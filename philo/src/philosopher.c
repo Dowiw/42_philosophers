@@ -6,7 +6,7 @@
 /*   By: kmonjard <kmonjard@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 21:55:23 by kmonjard          #+#    #+#             */
-/*   Updated: 2025/08/20 21:56:32 by kmonjard         ###   ########.fr       */
+/*   Updated: 2026/04/09 18:11:07 by kmonjard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,8 @@ void	*philosopher_routine(void *arg)
 	{
 		if (philo_eat(philo) != 0)
 			break ;
-		if (philo->data->must_eat_count != -1 &&
-			philo->meals_eaten >= philo->data->must_eat_count)
+		if (philo->data->must_eat_count != -1
+			&& philo->meals_eaten >= philo->data->must_eat_count)
 			break ;
 		print_status(philo, "is sleeping");
 		ft_usleep(philo->data->sleep_time, philo->data);
