@@ -1,4 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   threads.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kmonjard <kmonjard@student.42berlin.d      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/09 18:13:15 by kmonjard          #+#    #+#             */
+/*   Updated: 2026/04/09 18:13:16 by kmonjard         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philosophers.h"
+#include <unistd.h>
+#include <stdio.h>
 
 /**
  * @brief Extension of monitor_simulation.
@@ -20,8 +34,8 @@ static int	monitor_each(t_philo_data *data, int *full_philos, int i)
 		pthread_mutex_unlock(&data->philos[i].meal_mutex);
 		return (1);
 	}
-	if (data->must_eat_count != -1 &&
-		data->philos[i].meals_eaten >= data->must_eat_count)
+	if (data->must_eat_count != -1
+		&& data->philos[i].meals_eaten >= data->must_eat_count)
 		(*full_philos)++;
 	pthread_mutex_unlock(&data->philos[i].meal_mutex);
 	return (0);
