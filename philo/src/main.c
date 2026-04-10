@@ -23,8 +23,8 @@ int	main(int ac, char **av)
 	if (ac != 5 && ac != 6)
 	{
 		write(STDERR_FILENO, "Usage: ./philo <no. of philosophers> "
-			"<time to die> <time to eat> <time to sleep> "
-			"<times philo must eat>\n", 105);
+			"<death ms> <eat ms> <sleep ms> "
+			"<optional: max eat count>\n", 95);
 		return (1);
 	}
 	if (parse_args(ac, av, &data) != 0)
